@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hackmusic - 3h Prototyp</title>
+    <style>
+        body {
+            background-color: #0f111a;
+            color: #ffffff;
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        h1 { color: #00ffcc; margin-bottom: 5px; }
+        p { color: #8a8ab5; margin-top: 0; margin-bottom: 20px; font-size: 14px; }
+
+        .controls {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            background: #171925;
+            padding: 10px 20px;
+            border-radius: 8px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(16, 40px);
+            gap: 4px;
+        }
+
+        .cell {
+            width: 40px;
+            height: 40px;
+            background-color: #202336;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.1s;
+        }
+
+        /* Zustand: Aktiviertes Kästchen */
+        .cell.active {
+            background-color: #00ffcc;
+            box-shadow: 0 0 8px rgba(0, 255, 204, 0.5);
+        }
+
+        /* Zustand: Der Abspielbalken läuft gerade durch */
+        .cell.playing {
+            outline: 2px solid #ffffff;
+        }
+
+        button {
+            background: #00ffcc;
+            border: none;
+            padding: 10px 20px;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Hackmusic Studio</h1>
+
+    <div class="controls">
+        <button id="playBtn">Start</button>
+        <label>BPM: <input type="range" id="bpm" min="80" max="180" value="120"> <span id="bpmVal">120</span></label>
+    </div>
+
+    <div class="grid" id="matrix"></div>
+
+    <script>
+        // Audio-Kontext starten
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        let audioCtx = null;
+
+        // Eine einfache pentatonische Tonleiter (5 Töne, die immer harmonieren)
+        const notes = [220.00, 261.63, 293.66, 329.63, 392.00, 440.00].reverse(); 
+        const steps = 16;
+        const rows = notes.length;
+
+        let isPlaying = false;
+        let currentStep = 0;
+        let nextStepTime = 0.0;
+        let timerId = null;
+
+        // Matrix-Array mit "false" (leer) befüllen
+        let gridState = Array(steps).fill().map(() => Array(rows).fill(false));
+
+        // Grid im HTML generieren
+        const matrixContainer = document.getElementById('matrix');
+        for (let r = 0; r < rows; r++) {
+            for (let c = 0; c < steps; c++) {
+                const cell = document.createElement('div');
+                cell.classList.add('cell');
+                cell.dataset.row = r;
+                cell.dataset.col = c;
+
+                cell.addEventListener('click', () => {
+                    gridState[c][r] = !gridState[c][r];
+                    cell.classList.toggle('active');
+                    
+                    // Kurzer Test-Ton beim Anklicken
+                    if (gridState[c][r]) playTone(notes[r], audioCtx ? audioCtx.currentTime : 0);
+                });
+                matrixContainer.appendChild(cell);
+            }
+        }
+
+        function playTone(freq, time) {
+            if (!audioCtx) audioCtx = new AudioContext();
+            
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            
+            osc.type = 'triangle'; // Angenehmer, weicher Prototypen-Sound
+            osc.frequency.setValueAtTime(freq, time);
+            
+            // Simples Ein- und Ausblenden (Verhindert Knacken)
+            gain.gain.setValueAtTime(0, time);
+            gain.gain.linearRampToValueAtTime(0.2, time + 0.02);
+            gain.gain.exponentialRampToValueAtTime(0.001, time + 0.25);
+            
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            
+            osc.start(time);
+            osc.stop(time + 0.3);
+        }
+
+        // Die präzise Audio-Clock (Scheduler)
+        function scheduler() {
+            while (nextStepTime < audioCtx.currentTime + 0.1) {
+                scheduleStep(currentStep, nextStepTime);
+                
+                // Nächsten Schritt berechnen basierend auf BPM
+                const bpm = document.getElementById('bpm').value;
+                const stepDuration = (60.0 / bpm) / 4; // 16tel Note
+                nextStepTime += stepDuration;
+                
+                currentStep = (currentStep + 1) % steps;
+            }
+            timerId = setTimeout(scheduler, 25);
+        }
+
+        function scheduleStep(step, time) {
+            // Visuellen Balken verschieben
+            setTimeout(() => {
+                const cells = document.querySelectorAll('.cell');
+                cells.forEach(cell => {
+                    if (parseInt(cell.dataset.col) === step) {
+                        cell.classList.add('playing');
+                    } else {
+                        cell.classList.remove('playing');
+                    }
+                });
+            }, (time - audioCtx.currentTime) * 1000);
+
+            // Töne der aktuellen Spalte spielen
+            for (let r = 0; r < rows; r++) {
+                if (gridState[step][r]) {
+                    playTone(notes[r], time);
+                }
+            }
+        }
+
+        // Play / Stopp Button Event
+        document.getElementById('playBtn').addEventListener('click', function() {
+            if (!audioCtx) audioCtx = new AudioContext();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+
+            isPlaying = !isPlaying;
+            if (isPlaying) {
+                this.textContent = 'Stopp';
+                currentStep = 0;
+                nextStepTime = audioCtx.currentTime + 0.05;
+                scheduler();
+            } else {
+                this.textContent = 'Start';
+                clearTimeout(timerId);
+                document.querySelectorAll('.cell').forEach(c => c.classList.remove('playing'));
+            }
+        });
+
+        // BPM Slider Anzeige aktualisieren
+        document.getElementById('bpm').addEventListener('input', (e) => {
+            document.getElementById('bpmVal').textContent = e.target.value;
+        });
+    </script>
+</body>
+</html>
