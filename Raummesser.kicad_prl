@@ -1,0 +1,166 @@
+{
+  "board": {
+    "active_layer": 25,
+    "active_layer_preset": "",
+    "auto_track_width": true,
+    "hidden_netclasses": [
+      "Default"
+    ],
+    "hidden_nets": [
+      "",
+      "GND",
+      "Net-(U3-EN)",
+      "Net-(J2-Pin_2)",
+      "Net-(U1-EN)",
+      "Net-(J1-CC2)",
+      "Net-(J2-Pin_3)",
+      "Net-(J2-Pin_4)",
+      "unconnected-(U1-IO4-Pad3)",
+      "unconnected-(U1-IO5-Pad4)",
+      "unconnected-(U1-IO6-Pad5)",
+      "unconnected-(U1-IO7-Pad6)",
+      "unconnected-(U1-IO8-Pad7)",
+      "unconnected-(U1-IO9-Pad8)",
+      "unconnected-(U1-IO10-Pad10)",
+      "unconnected-(U1-IO20{slash}RXD-Pad11)",
+      "unconnected-(U1-IO21{slash}TXD-Pad12)",
+      "Net-(U1-IO18)",
+      "Net-(U1-IO19)",
+      "unconnected-(U1-IO3-Pad15)",
+      "unconnected-(U1-IO2-Pad16)",
+      "unconnected-(U3-NC-Pad4)",
+      "Net-(U2-SCL)",
+      "Net-(U2-SDA)",
+      "Net-(J1-CC1)",
+      "unconnected-(J1-SBU1-PadA8)",
+      "unconnected-(J1-SBU2-PadB8)",
+      "unconnected-(J1-SHIELD-PadSH)"
+    ],
+    "high_contrast_mode": 0,
+    "net_color_mode": 1,
+    "opacity": {
+      "images": 0.6,
+      "pads": 1.0,
+      "shapes": 1.0,
+      "tracks": 1.0,
+      "vias": 1.0,
+      "zones": 0.6
+    },
+    "prototype_zone_fills": false,
+    "selection_filter": {
+      "dimensions": true,
+      "footprints": true,
+      "graphics": true,
+      "keepouts": true,
+      "lockedItems": false,
+      "otherItems": true,
+      "pads": true,
+      "text": true,
+      "tracks": true,
+      "vias": true,
+      "zones": true
+    },
+    "visible_items": [
+      "vias",
+      "footprint_anchors",
+      "ratsnest",
+      "grid",
+      "footprints_front",
+      "footprints_back",
+      "tracks",
+      "drc_errors",
+      "drawing_sheet",
+      "bitmaps",
+      "pads",
+      "zones",
+      "drc_warnings",
+      "drc_exclusions",
+      "locked_item_shadows",
+      "conflict_shadows",
+      "shapes",
+      "board_outline_area",
+      "ly_points"
+    ],
+    "visible_layers": "ffffffff_ffffffff_ffffffff_ffffffff",
+    "zone_display_mode": 0
+  },
+  "git": {
+    "integration_disabled": false,
+    "repo_type": "",
+    "repo_username": "",
+    "ssh_key": ""
+  },
+  "meta": {
+    "filename": "Raummesser.kicad_prl",
+    "version": 5
+  },
+  "net_inspector_panel": {
+    "col_hidden": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "col_order": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    "col_widths": [
+      162,
+      147,
+      91,
+      72,
+      91,
+      100,
+      91,
+      76,
+      91,
+      674
+    ],
+    "custom_group_rules": [],
+    "expanded_rows": [],
+    "filter_by_net_name": true,
+    "filter_by_netclass": true,
+    "filter_text": "",
+    "group_by_constraint": false,
+    "group_by_netclass": false,
+    "show_time_domain_details": false,
+    "show_unconnected_nets": false,
+    "show_zero_pad_nets": false,
+    "sort_ascending": true,
+    "sorting_column": 0
+  },
+  "open_jobsets": [],
+  "project": {
+    "files": []
+  },
+  "schematic": {
+    "hierarchy_collapsed": [],
+    "selection_filter": {
+      "graphics": true,
+      "images": true,
+      "labels": true,
+      "lockedItems": false,
+      "otherItems": true,
+      "pins": true,
+      "ruleAreas": true,
+      "symbols": true,
+      "text": true,
+      "wires": true
+    }
+  }
+}
