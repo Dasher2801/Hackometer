@@ -1,6 +1,6 @@
 {
   "board": {
-    "active_layer": 25,
+    "active_layer": 0,
     "active_layer_preset": "",
     "auto_track_width": true,
     "hidden_netclasses": [
@@ -8,7 +8,6 @@
     ],
     "hidden_nets": [
       "",
-      "GND",
       "Net-(U3-EN)",
       "Net-(J2-Pin_2)",
       "Net-(U1-EN)",
@@ -25,7 +24,6 @@
       "unconnected-(U1-IO20{slash}RXD-Pad11)",
       "unconnected-(U1-IO21{slash}TXD-Pad12)",
       "Net-(U1-IO18)",
-      "Net-(U1-IO19)",
       "unconnected-(U1-IO3-Pad15)",
       "unconnected-(U1-IO2-Pad16)",
       "unconnected-(U3-NC-Pad4)",
